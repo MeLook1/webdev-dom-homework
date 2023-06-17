@@ -162,7 +162,8 @@
         date: now,
         text: addFormText.value,
         likes: "0",
-        isLiked: false
+        isLiked: false,
+        forceError: true,
       }),
     })
       .then((response) => {
@@ -171,14 +172,37 @@
         return response;
       })
       .then((response) => {
-        return response.json();
+        if (response.status === 400) {
+          addFormName.classList.add("error");
+          addFormText.classList.add("error");
+          loader.classList.add("hidden");
+          throw new Error("Коротко");
+        }  else if (response.status === 500) {
+          loader.classList.add("hidden");
+          throw new Error("Сломался");
+        } else {
+          addFormName.value = '';
+          addFormText.value = '';
+          return response.json();
+        }
       })
       .then(() => {
         return fetchAndRenderComments();
-      });
+      })
+      .catch((error) => {
+        if (error.message === "Коротко") {
+          alert("Короткое имя или текст комментария, минимум 3 символа");
+          return;
+        } else
+          if (error.message === "Сломался") {
+            alert("Сервер сломался, попробуй позже");
+            return;
+          }
+
+      })
+
     renderComments();
-    addFormName.value = '';
-    addFormText.value = '';
+
   });
 
   console.log("It works!");
