@@ -1,4 +1,4 @@
-import { getAndRenderComments, comments, sendAndRenderComments } from "./api";
+import { getAndRenderComments, comments, sendAndRenderComments } from "./api.js";
 import { renderComments } from "./render.js";
 
 var now = new Date().toLocaleString().slice(0, -3);
@@ -11,7 +11,7 @@ const container = document.querySelector(".container");
 const addFormBox = document.querySelector(".add-form");
 const loader = document.querySelector("p");
 
-export { loader, now, addFormBox, addFormName, addFormText, initLikeButtonListeners, answerComment };
+export { listElement, loader, now, addFormBox, addFormName, addFormText, initLikeButtonListeners, answerComment };
 
 
 

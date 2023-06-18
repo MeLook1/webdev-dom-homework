@@ -30,4 +30,4 @@ const renderComments = () => {
     initLikeButtonListeners();
     answerComment();
 };
-export { renderComments };
+export { renderComments, listElement };

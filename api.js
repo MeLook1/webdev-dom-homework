@@ -1,5 +1,5 @@
 import { loader, now, addFormBox, addFormName, addFormText } from "./script.js";
-import { renderComments } from "./render.js";
+import { renderComments, listElement } from "./render.js";
 
 let comments = [];
 export { comments };
@@ -74,9 +74,9 @@ export const sendAndRenderComments = () => {
         .then(() => {
             return getAndRenderComments();
         })
-        // .then(()=>{
-        //     return renderComments();
-        // })
+        .then(() => {
+            return renderComments();
+        })
         .catch((error) => {
             if (error.message === "Коротко") {
                 alert("Короткое имя или текст комментария, минимум 3 символа");
