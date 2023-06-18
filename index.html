@@ -64,9 +64,13 @@
             isLiked: false,
           };
         });
+
         addFormBox.classList.remove('hidden');
         comments = appComments;
         renderComments();
+      })
+      .catch(() => {
+        alert("Проблемы с интернетом, проверьте подключение");
       });
   };
 
@@ -177,7 +181,7 @@
           addFormText.classList.add("error");
           loader.classList.add("hidden");
           throw new Error("Коротко");
-        }  else if (response.status === 500) {
+        } else if (response.status === 500) {
           loader.classList.add("hidden");
           throw new Error("Сломался");
         } else {
@@ -192,11 +196,11 @@
       .catch((error) => {
         if (error.message === "Коротко") {
           alert("Короткое имя или текст комментария, минимум 3 символа");
-          return;
         } else
           if (error.message === "Сломался") {
             alert("Сервер сломался, попробуй позже");
-            return;
+          } else {
+            alert("Проблемы с интернетом, проверьте подключение");
           }
 
       })
