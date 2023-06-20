@@ -1,17 +1,12 @@
 import { getAndRenderComments, comments, sendAndRenderComments } from "./api.js";
-import { renderComments } from "./render.js";
+import { renderComments,addButton,addFormName,addFormText,container,addFormBox,loader  } from "./render.js";
 
 var now = new Date().toLocaleString().slice(0, -3);
 
-const addButton = document.getElementById("add-form-button");
-const listElement = document.getElementById("list");
-const addFormName = document.getElementById("add-form-name");
-const addFormText = document.getElementById("add-form-text");
-const container = document.querySelector(".container");
-const addFormBox = document.querySelector(".add-form");
-const loader = document.querySelector("p");
 
-export { listElement, loader, now, addFormBox, addFormName, addFormText, initLikeButtonListeners, answerComment };
+const appEl = document.getElementById("app");
+
+export { initLikeButtonListeners, answerComment,appEl };
 
 
 

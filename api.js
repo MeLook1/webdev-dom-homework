@@ -1,13 +1,16 @@
-import { loader, now, addFormBox, addFormName, addFormText } from "./script.js";
-import { renderComments, listElement } from "./render.js";
+import { renderComments, listElement,addFormName,addFormText,addFormBox,loader } from "./render.js";
 
 let comments = [];
 export { comments };
+const host = "https://wedev-api.sky.pro/api/v2/MeLook/comments"
+let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
 //Отправляем GET-запрос
-
 export const getAndRenderComments = () => {
-    return fetch("https://wedev-api.sky.pro/api/v1/MeLook/comments", {
-        method: "GET"
+    return fetch(host, {
+        method: "GET",
+        headers: {
+            AAuthorization: token,
+        },
     })
         .then((response) => {
             listElement.classList.remove("hidden");
@@ -40,16 +43,19 @@ getAndRenderComments();
 
 //Отправляем POST-запрос
 export const sendAndRenderComments = () => {
-    fetch("https://wedev-api.sky.pro/api/v1/MeLook/comments", {
+    fetch(host, {
         method: "POST",
         body: JSON.stringify({
             name: addFormName.value,
-            date: now,
+            date: new Date(comment.date).toLocaleString().slice(0, -3),
             text: addFormText.value,
             likes: "0",
             isLiked: false,
             // forceError: true,
         }),
+        headers: {
+            AAuthorization: token,
+        },
     })
         .then((response) => {
             addFormBox.classList.remove("hidden");

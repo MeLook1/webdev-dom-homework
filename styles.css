@@ -152,3 +152,6 @@ body {
   .loader{
     color: white;
   }
+  .center{
+    align-items: center;
+  }
