@@ -52,7 +52,7 @@ const renderComments = () => {
                     </div>
                 </div>`
     
-    appEl.innerHTML = commentsHtml;
+    appEl.innerHTML = appHtml;
     
     initLikeButtonListeners();
     answerComment();
