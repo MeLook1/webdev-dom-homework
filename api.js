@@ -1,15 +1,17 @@
-import { renderComments, listElement,addFormName,addFormText,addFormBox,loader } from "./render.js";
+import { renderComments } from "./render.js";
+import { listElement, addFormName, addFormText, addFormBox, loader, now } from "./script.js";
+
 
 let comments = [];
 export { comments };
 const host = "https://wedev-api.sky.pro/api/v2/MeLook/comments"
 let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
 //Отправляем GET-запрос
-export const getAndRenderComments = () => {
+export const getAndRenderComments = (token) => {
     return fetch(host, {
         method: "GET",
         headers: {
-            AAuthorization: token,
+            Authorization: token,
         },
     })
         .then((response) => {
@@ -39,22 +41,17 @@ export const getAndRenderComments = () => {
             alert("Проблемы с интернетом, проверьте подключение");
         });
 };
-getAndRenderComments();
+
 
 //Отправляем POST-запрос
-export const sendAndRenderComments = () => {
+export const sendAndRenderComments = (text, token) => {
     fetch(host, {
         method: "POST",
         body: JSON.stringify({
-            name: addFormName.value,
-            date: new Date(comment.date).toLocaleString().slice(0, -3),
-            text: addFormText.value,
-            likes: "0",
-            isLiked: false,
-            // forceError: true,
+            text,
         }),
         headers: {
-            AAuthorization: token,
+            Authorization: token,
         },
     })
         .then((response) => {

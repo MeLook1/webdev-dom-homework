@@ -1,9 +1,10 @@
-import { initLikeButtonListeners, answerComment,appEl } from "./script.js";
-import { comments } from "./api.js";
+import { initLikeButtonListeners, answerComment, appEl } from "./script.js";
+import { comments, getAndRenderComments, sendAndRenderComments } from "./api.js";
 
 
 //Рендер комментов
 const renderComments = () => {
+   
     const commentsHtml = comments
         .map((comment, index) => {
             return `<li class="comment">
@@ -51,17 +52,11 @@ const renderComments = () => {
                         </div>
                     </div>
                 </div>`
-    
+
     appEl.innerHTML = appHtml;
     
-    initLikeButtonListeners();
-    answerComment();
+    
+    
 };
-const addButton = document.getElementById("add-form-button");
-const listElement = document.getElementById("list");
-const addFormName = document.getElementById("add-form-name");
-const addFormText = document.getElementById("add-form-text");
-const container = document.querySelector(".container");
-const addFormBox = document.querySelector(".add-form");
-const loader = document.querySelector("p");
-export { renderComments, listElement,addButton,addFormName,addFormText,container,addFormBox,loader };
+
+export { renderComments };

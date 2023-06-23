@@ -1,14 +1,21 @@
 import { getAndRenderComments, comments, sendAndRenderComments } from "./api.js";
-import { renderComments,addButton,addFormName,addFormText,container,addFormBox,loader  } from "./render.js";
+import { renderComments } from "./render.js";
 
 var now = new Date().toLocaleString().slice(0, -3);
 
 
 const appEl = document.getElementById("app");
 
-export { initLikeButtonListeners, answerComment,appEl };
+renderComments();
+getAndRenderComments();
 
-
+const addButton = document.getElementById("add-form-button");
+const listElement = document.getElementById("list");
+const addFormName = document.getElementById("add-form-name");
+const addFormText = document.getElementById("add-form-text");
+const container = document.querySelector(".container");
+const addFormBox = document.querySelector(".add-form");
+const loader = document.querySelector("p");
 
 //Злостно (или нет) отвечаем на коммент
 const answerComment = () => {
@@ -22,7 +29,6 @@ const answerComment = () => {
     });
 }
 answerComment();
-
 //Ставим лайки комментам
 const initLikeButtonListeners = () => {
     const likeButtonsElements = document.querySelectorAll(".like-button");
@@ -48,10 +54,8 @@ const initLikeButtonListeners = () => {
 
 
 
-getAndRenderComments();
-renderComments();
 
-
+sendAndRenderComments();
 //Пишется коммент
 addButton.addEventListener("click", () => {
     addFormName.classList.remove("error");
@@ -74,3 +78,4 @@ addButton.addEventListener("click", () => {
 });
 
 console.log("It works!");
+export { initLikeButtonListeners, answerComment,appEl, listElement, addFormName, addFormText, addFormBox, loader,now };
