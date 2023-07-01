@@ -103,7 +103,7 @@ export function loginUser({ login, password }) {
 
 //Проверка
 export const isUserAuthorization = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('0');
     if (token) {
         return true;
     }

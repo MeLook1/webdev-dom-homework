@@ -17,7 +17,7 @@ const getListCommentsEdit = (comment, index) => {
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter ">${comment.like}</span>
+              <span class="likes-counter ">${comment.likes}</span>
               <button class="like-button  ${isLike}" data-index="${index}"></button>
             </div>
           </div>
@@ -28,6 +28,9 @@ const getListCommentsEdit = (comment, index) => {
 export const renderComments = ({ comments, handleCommentAnswerClick, handleCommentLikeClick }) => {
     const appEl = document.getElementById("app");
     const nameUser = localStorage.getItem('user');
+    const loader = document.createElement("p");
+    loader.textContent = "ffff";
+    appEl.appendChild(loader);
     const commentsHtml = comments.map((comment, index) => getListCommentsEdit(comment, index))
         .join('');
     const appShowHtml = `
@@ -48,7 +51,6 @@ export const renderComments = ({ comments, handleCommentAnswerClick, handleComme
           id="add-text"></textarea>
         <div class="add-form-row">
           <button id="add-button" class="add-form-button">Написать</button>
-          <button id="add-delete" class="delete-button">Удалить</button>
         </div>
       </div>
     </div>
@@ -65,7 +67,7 @@ export const renderComments = ({ comments, handleCommentAnswerClick, handleComme
             const commentAddingMessage = document.createElement('div');
             commentAddingMessage.innerText = 'Комментарий добавляется...';
             commentForm.parentNode.insertBefore(commentAddingMessage, commentForm);
-
+            initApp();
             textElement.classList.remove("error");
             if (textElement.value === "" && commentInputElement.value.length < 3) {
                 textElement.classList.add("error");
@@ -96,6 +98,7 @@ export const renderComments = ({ comments, handleCommentAnswerClick, handleComme
                 });
         });
     };
+
     const initAppRender = () => {
         let appHtml = '';
         if (!isUserAuthorization()) {

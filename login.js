@@ -3,8 +3,7 @@ import { loginUser, registerUser } from "./api.js";
 export const renderLoginComponent = ({ appEl, initApp }) => {
     let isLoginMode = true;
     const renderForm = () => {
-        const appHtml = `
-    <div class="form"></div>
+        const appHtml = `  
     <div class="add-form">Форма ${isLoginMode ? "входа" : "регистрации"}
     ${isLoginMode ? ""
                 :
