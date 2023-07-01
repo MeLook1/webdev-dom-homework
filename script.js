@@ -1,97 +1,55 @@
 import { getAndRenderComments } from "./api.js";
 import { renderComments } from "./render.js";
 
-renderComments();
-
+const renderApp = () => {
+    renderComments({ comments, handleCommentLikeClick, handleCommentAnswerClick });
+};
+const loader = document.createElement('div');
 var now = new Date().toLocaleString().slice(0, -3);
 const appEl = document.getElementById("app");
-const loader = document.querySelector("p");
 loader.className = "loader";
-loader.textContent = "Загрузка вашего комментария...";
+loader.innerText = "Загрузка вашего комментария...";
 appEl.appendChild(loader);
 
 export const initApp = () => {
     getAndRenderComments()
         .then((appComments) => {
             comments = appComments;
-            renderComments();
+            renderApp();
         })
         .then((data) => {
-            commentAdding.style.display = 'none';
+            loader.style.display = 'none';
         });
 }
 
-let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
-
-
-
-const addButton = document.getElementById("add-form-button");
-const listElement = document.getElementById("list");
-const addFormName = document.getElementById("add-form-name");
-const addFormText = document.getElementById("add-form-text");
-const container = document.querySelector(".container");
-const addFormBox = document.querySelector(".add-form");
-
-
-
-getAndRenderComments(token);
-//Злостно (или нет) отвечаем на коммент
-const answerComment = () => {
-    const boxCommentsTexts = document.querySelectorAll('.comment');
-    boxCommentsTexts.forEach((comment) => {
-        comment.addEventListener('click', () => {
-            const author = comment.querySelector('.comment-header div:first-child').textContent;
-            const text = comment.querySelector('.comment-text').textContent;
-            addFormText.value = ` > Автор: ${author} \n ${text} \n Ответ: `;
-        });
-    });
-}
-answerComment();
+let comments = [];
 // Ставим лайки комментам
-const initLikeButtonListeners = () => {
-    const likeButtonsElements = document.querySelectorAll(".like-button");
-    for (const likeButtonElement of likeButtonsElements) {
-        likeButtonElement.addEventListener("click", (event) => {
-            const index = likeButtonElement.dataset.index;
-            if (comments[index].isLiked) {
-                comments[index].likes--;
-                comments[index].isLiked = false;
-            } else {
-                comments[index].likes++;
-                comments[index].isLiked = true;
-
-            }
-
-
-            console.log("нажал");
-            renderComments();
-            event.stopPropagation();
-        });
+const handleCommentLikeClick = (event) => {
+    event.stopPropagation();
+    const index = event.target.dataset.index;
+    const likesContainer = event.target.closest('.comment-footer');
+    const likesCounter = likesContainer.querySelector('.likes-counter');
+    let countInLike = likesCounter.textContent;
+    if (comments[index].isLike === true) {
+        countInLike = (+countInLike) -1;
+        comments[index].isLike = false;
+    } else {
+        countInLike = (+countInLike) + 1;
+        comments[index].isLike = true;
     }
+    comments[index].like = countInLike;
+    renderApp();
 };
 
-initLikeButtonListeners();
+//Отвечаем
+let commentAnswer = null;
+const handleCommentAnswerClick = (event) => {
+    const textElement = document.getElementById("add-text");
+    commentAnswer = event.target.dataset.index;
+    textElement.value = `> ${comments[commentAnswer]
+        }`
+        + `\n\n${comments[commentAnswer]
+        }`
 
-
-
-//Пишется коммент
-addButton.addEventListener("click", () => {
-    addFormName.classList.remove("error");
-    addFormText.classList.remove("error");
-    if (addFormName.value === "" || addFormText.value === "") {
-        addFormName.classList.add("error");
-        addFormText.classList.add("error");
-        alert("Поля не заполнены");
-        return;
-    }
-    addFormBox.classList.add("hidden");
-
-
-    getAndRenderComments();
-    sendAndRenderComments();
-    renderComments();
-
-});
-
-console.log("It works!");
-export { listElement, addFormName, addFormText, addFormBox, loader, now };
+};
+initApp();

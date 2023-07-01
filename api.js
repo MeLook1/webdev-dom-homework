@@ -24,7 +24,7 @@ export const getAndRenderComments = () => {
                 };
             });
             return appComments;
-        });   
+        });
 };
 
 //Отправляем POST-запрос
@@ -43,24 +43,24 @@ export const sendAndRenderComments = (text) => {
         .then((response) => {
             if (response.status === 400) {
                 throw new Error("Коротко");
-            } else if (response.status === 500) {
-                throw new Error("Сломался");
-            } else {
-                addFormName.value = '';
-                addFormText.value = '';
-                return response.json();
             }
+            if (response.status === 500) {
+                throw new Error("Сломался");
+            }
+            return response.json();
         })
         .catch((error) => {
+            if (error.message === "Сломался") {
+                alert("Сервер сломался, попробуй позже");
+                return;
+            };
             if (error.message === "Коротко") {
-                alert("Короткое имя или текст комментария, минимум 3 символа");
-            } else
-                if (error.message === "Сломался") {
-                    alert("Сервер сломался, попробуй позже");
-                } else {
-                    alert("Проблемы с интернетом, проверьте подключение");
-                }
-
+                alert("Имя и комментарий должны быть не короче 3 символов");
+                return;
+            } else {
+                alert("У вас проблемы с интернетом");
+                return;
+            };
         });
 };
 
@@ -70,8 +70,8 @@ export function registerUser({ login, password, name }) {
         method: "POST",
         body: JSON.stringify({
             login,
-            password,
             name,
+            password,
         }),
     }).then((response) => {
         if (response.status === 400) {
