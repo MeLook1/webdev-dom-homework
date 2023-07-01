@@ -1,13 +1,29 @@
-import { getAndRenderComments, comments, sendAndRenderComments } from "./api.js";
+import { getAndRenderComments } from "./api.js";
 import { renderComments } from "./render.js";
 
-var now = new Date().toLocaleString().slice(0, -3);
-
-
-const appEl = document.getElementById("app");
-
 renderComments();
-getAndRenderComments();
+
+var now = new Date().toLocaleString().slice(0, -3);
+const appEl = document.getElementById("app");
+const loader = document.querySelector("p");
+loader.className = "loader";
+loader.textContent = "Загрузка вашего комментария...";
+appEl.appendChild(loader);
+
+export const initApp = () => {
+    getAndRenderComments()
+        .then((appComments) => {
+            comments = appComments;
+            renderComments();
+        })
+        .then((data) => {
+            commentAdding.style.display = 'none';
+        });
+}
+
+let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
+
+
 
 const addButton = document.getElementById("add-form-button");
 const listElement = document.getElementById("list");
@@ -15,8 +31,10 @@ const addFormName = document.getElementById("add-form-name");
 const addFormText = document.getElementById("add-form-text");
 const container = document.querySelector(".container");
 const addFormBox = document.querySelector(".add-form");
-const loader = document.querySelector("p");
 
+
+
+getAndRenderComments(token);
 //Злостно (или нет) отвечаем на коммент
 const answerComment = () => {
     const boxCommentsTexts = document.querySelectorAll('.comment');
@@ -29,7 +47,7 @@ const answerComment = () => {
     });
 }
 answerComment();
-//Ставим лайки комментам
+// Ставим лайки комментам
 const initLikeButtonListeners = () => {
     const likeButtonsElements = document.querySelectorAll(".like-button");
     for (const likeButtonElement of likeButtonsElements) {
@@ -52,10 +70,10 @@ const initLikeButtonListeners = () => {
     }
 };
 
+initLikeButtonListeners();
 
 
 
-sendAndRenderComments();
 //Пишется коммент
 addButton.addEventListener("click", () => {
     addFormName.classList.remove("error");
@@ -67,9 +85,7 @@ addButton.addEventListener("click", () => {
         return;
     }
     addFormBox.classList.add("hidden");
-    loader.className = "loader";
-    loader.textContent = "Загрузка вашего комментария...";
-    container.appendChild(loader);
+
 
     getAndRenderComments();
     sendAndRenderComments();
@@ -78,4 +94,4 @@ addButton.addEventListener("click", () => {
 });
 
 console.log("It works!");
-export { initLikeButtonListeners, answerComment,appEl, listElement, addFormName, addFormText, addFormBox, loader,now };
+export { listElement, addFormName, addFormText, addFormBox, loader, now };

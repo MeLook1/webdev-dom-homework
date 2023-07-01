@@ -1,10 +1,10 @@
-import { initLikeButtonListeners, answerComment, appEl } from "./script.js";
-import { comments, getAndRenderComments, sendAndRenderComments } from "./api.js";
+import {  } from "./script.js";
+import { comments } from "./api.js";
+import { renderLoginComponent } from "./login.js";
 
 
-//Рендер комментов
 const renderComments = () => {
-   
+    
     const commentsHtml = comments
         .map((comment, index) => {
             return `<li class="comment">
@@ -54,8 +54,6 @@ const renderComments = () => {
                 </div>`
 
     appEl.innerHTML = appHtml;
-    
-    
     
 };
 
