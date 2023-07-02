@@ -7,3 +7,6 @@ https://glebkaf.github.io/webdev-dom-homework/
 ## Как разрабатывать
 
 Открой index.html в браузере
+
+## САЙТ ПРИЛОЖЕНИЯ
+https://melook1.github.io/webdev-dom-homework/
