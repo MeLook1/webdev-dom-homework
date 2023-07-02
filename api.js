@@ -1,5 +1,5 @@
 const host = "https://wedev-api.sky.pro/api/v2/MeLook/comments"
-
+import {format} from "date-fns";
 //Отправляем GET-запрос
 export const getAndRenderComments = () => {
     const token = localStorage.getItem("token");
@@ -17,7 +17,7 @@ export const getAndRenderComments = () => {
             const appComments = responseData.comments.map((comment) => {
                 return {
                     name: comment.author.name,
-                    date: new Date(comment.date).toLocaleString().slice(0, -3),
+                    date: format(new Date(comment.date), 'dd/MM/yyyy kk:mm:ss'),
                     text: comment.text,
                     likes: comment.likes,
                     isLiked: false,

@@ -5,9 +5,6 @@ const renderApp = () => {
     renderComments({ comments, handleCommentLikeClick, handleCommentAnswerClick });
 };
 
-var now = new Date().toLocaleString().slice(0, -3);
-
-
 export const initApp = () => {
    
     getAndRenderComments()

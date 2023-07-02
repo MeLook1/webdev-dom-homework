@@ -1,11 +1,9 @@
 import { initApp } from "./script.js";
 import { isUserAuthorization, sendAndRenderComments } from "./api.js";
 import { renderLoginComponent } from "./login.js";
-// import { formatDateToRu, formatDateToUs } from "./lib/formatDate/formatDate.js";
 
 
 const getListCommentsEdit = (comment, index) => {
-    const country = "ru";
     let isLike = comment.isLike ? "-active-like" : "";
     return `<li class="comment">
           <div class="comment-header">
@@ -23,7 +21,6 @@ const getListCommentsEdit = (comment, index) => {
               <button class="like-button  ${isLike}" data-index="${index}"></button>
               </div>
           </div>
-        //   <p><i>Задача создана: ${country === "ru" ? formatDateToRu(new Date(task.created_at)) : formatDateToUs(new Date(task.created_at))}</i></p>
         </li>`
 }
 
