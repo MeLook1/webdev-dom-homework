@@ -1,19 +1,15 @@
-import { loader, now, addFormBox, addFormName, addFormText } from "./script.js";
-import { renderComments, listElement } from "./render.js";
-
-let comments = [];
-export { comments };
+const host = "https://wedev-api.sky.pro/api/v2/MeLook/comments"
+import {format} from "date-fns";
 //Отправляем GET-запрос
-
 export const getAndRenderComments = () => {
-    return fetch("https://wedev-api.sky.pro/api/v1/MeLook/comments", {
-        method: "GET"
+    const token = localStorage.getItem("token");
+    return fetch(host, {
+        method: "GET",
+        forceError: false,
+        headers: {
+            Authorization: token,
+        },
     })
-        .then((response) => {
-            listElement.classList.remove("hidden");
-            loader.classList.add("hidden");
-            return response;
-        })
         .then((response) => {
             return response.json();
         })
@@ -21,71 +17,95 @@ export const getAndRenderComments = () => {
             const appComments = responseData.comments.map((comment) => {
                 return {
                     name: comment.author.name,
-                    date: new Date(comment.date).toLocaleString().slice(0, -3),
+                    date: format(new Date(comment.date), 'dd/MM/yyyy kk:mm:ss'),
                     text: comment.text,
                     likes: comment.likes,
                     isLiked: false,
                 };
             });
-
-            addFormBox.classList.remove('hidden');
-            comments = appComments;
-            renderComments();
-        })
-        .catch(() => {
-            alert("Проблемы с интернетом, проверьте подключение");
+            return appComments;
         });
 };
-getAndRenderComments();
 
 //Отправляем POST-запрос
-export const sendAndRenderComments = () => {
-    fetch("https://wedev-api.sky.pro/api/v1/MeLook/comments", {
+export const sendAndRenderComments = (text) => {
+    const token = localStorage.getItem("token");
+    fetch(host, {
         method: "POST",
         body: JSON.stringify({
-            name: addFormName.value,
-            date: now,
-            text: addFormText.value,
-            likes: "0",
-            isLiked: false,
-            // forceError: true,
+            text,
+            forceError: false,
         }),
+        headers: {
+            Authorization: token,
+        },
     })
         .then((response) => {
-            addFormBox.classList.remove("hidden");
-            loader.classList.add("hidden");
-            return response;
-        })
-        .then((response) => {
             if (response.status === 400) {
-                addFormName.classList.add("error");
-                addFormText.classList.add("error");
-                loader.classList.add("hidden");
                 throw new Error("Коротко");
-            } else if (response.status === 500) {
-                loader.classList.add("hidden");
-                throw new Error("Сломался");
-            } else {
-                addFormName.value = '';
-                addFormText.value = '';
-                return response.json();
             }
-        })
-        .then(() => {
-            return getAndRenderComments();
-        })
-        .then(() => {
-            return renderComments();
+            if (response.status === 500) {
+                throw new Error("Сломался");
+            }
+            return response.json();
         })
         .catch((error) => {
+            if (error.message === "Сломался") {
+                alert("Сервер сломался, попробуй позже");
+                return;
+            };
             if (error.message === "Коротко") {
-                alert("Короткое имя или текст комментария, минимум 3 символа");
-            } else
-                if (error.message === "Сломался") {
-                    alert("Сервер сломался, попробуй позже");
-                } else {
-                    alert("Проблемы с интернетом, проверьте подключение");
-                }
-
+                alert("Имя и комментарий должны быть не короче 3 символов");
+                return;
+            } else {
+                alert("У вас проблемы с интернетом");
+                return;
+            };
         });
 };
+
+//Регистрация
+export function registerUser({ login, password, name }) {
+    return fetch("https://wedev-api.sky.pro/api/user", {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            name,
+            password,
+        }),
+    }).then((response) => {
+        if (response.status === 400) {
+            throw new Error("Такой пользователь уже существует");
+        }
+        return response.json();
+    });
+};
+
+//Авторизация
+export function loginUser({ login, password }) {
+    return fetch(" https://wedev-api.sky.pro/api/user/login", {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            password,
+        }),
+    }).then((response) => {
+        if (response.status === 400) {
+            throw new Error("Неверный логин или пароль");
+        }
+        return response.json();
+    }).then((user) => {
+        localStorage.setItem('token', `Bearer ${user.user.token}`);
+        localStorage.setItem('user', user.user.name);
+    });
+
+};
+
+//Проверка
+export const isUserAuthorization = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        return true;
+    }
+    return false;
+}
